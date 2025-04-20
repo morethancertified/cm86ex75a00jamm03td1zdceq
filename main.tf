@@ -1,12 +1,18 @@
-resource "github_repository" "this" {
-  name               = "infrastructure-dev"
-  description        = "Infrastructure Dev Repository"
-  auto_init          =  true
-  visibility         = "public"
-  gitignore_template = "Terraform"
+resource "aws_vpc" "this" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+  
+  tags = {
+    Name = "infrastructure-dev"
+  }
 }
 
-resource "github_branch" "this" {
-  repository = github_repository.this.name
-  branch     = "staging"
+resource "aws_subnet" "this" {
+  vpc_id     = aws_vpc.this.id
+  cidr_block = "10.0.1.0/24"
+  
+  tags = {
+    Name = "infrastructure-dev-subnet"
+  }
 }
